@@ -10,18 +10,16 @@ fun wrap(q: String, prefix: String = "{", postfix: String = "}") = prefix + q + 
 infix fun String.tAl(alias: String) = this + " as " + alias //table alias
 infix fun String.fAl(alias: String) = alias + "." + this //field alias
 
-fun mathTest(listOfNumbers: List<Int>, myFun: (num: Int, num2: Int) -> Int) {
-    for (listOfNumber in listOfNumbers) {
-
-    }
-}
-
 
 fun main(args: Array<String>) {
     val sb = StringBuilder()
     val fs = FS(sb)
 
-    println(fs.select().fields("pk", "creationtime").from("Order", Join(sb, "BillingTime" tAl "bt", "billingTime", "pk" fAl "bt"))
+    println(fs.select().fields("pk", "creationtime").from("Order" tAl "o",
+            Join
+            (sb, "BillingTime" tAl "bt",
+            "billingTime" fAl "o",
+            "pk" fAl "bt"))
             .where("user")
             .equals("customer")
             .and()
@@ -30,7 +28,7 @@ fun main(args: Array<String>) {
             .and()
             .fields("store")
             .equals("store")
-            .and("code" tAl "bt")
+            .and("code" fAl "bt")
             .like("paynow", LIKE_TYPE.EQUALS)
             .build())
 }

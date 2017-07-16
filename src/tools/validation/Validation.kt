@@ -3,7 +3,7 @@ package tools.validation
 import java.util.function.Predicate
 
 /**
- * Created by Novarto on 6/6/17.
+ * Created by Stefan on 6/6/17.
  */
 
 
@@ -11,8 +11,8 @@ fun main(args: Array<String>) {
 
 
     println(Validation<String, String>()
-            .rule(Predicate { p -> p.length > 5 }, "Length Should be < than 5", "test")
-            .on("test", "zxc"))
+            .rule(Predicate { p -> p.length > 5 }, "Length Should be < than 5")
+            .on("test64363", "zxc"))
 
 
 }
@@ -21,14 +21,13 @@ fun main(args: Array<String>) {
 class Validation<T, R> {
 
     private val rules = mutableListOf<Pair<Predicate<T>, R>>()
-
-    fun rule(p: Predicate<T>, result: R, reason: String): Validation<T, R> {
-        rules.add(Pair(p, result))
+    fun rule(p: Predicate<T>, resultIfFailed: R): Validation<T, R> {
+        rules.add(Pair(p, resultIfFailed))
         return this
     }
 
     fun on(t: T, default: R): R {
-        return rules.filter { it.first.test(t) }.map { pair -> pair.second }.getOrElse(0, { default })
+        return rules.filter { it.first.test(t) }.map { pair -> pair.second }.getOrElse(0, {default})
     }
 
 
